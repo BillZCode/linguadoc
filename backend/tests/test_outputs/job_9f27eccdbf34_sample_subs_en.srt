@@ -1,0 +1,11 @@
+1
+00:00:01,500 --> 00:00:04,200
+「[Terjemahan Demo] Halo, selamat datang di LinguaDoc.」
+
+2
+00:00:05,000 --> 00:00:08,500
+「[Terjemahan Demo] Sistem ini mempertahankan struktur dan urutan dokumen Anda.」
+
+3
+00:00:09,100 --> 00:00:12,000
+「[Terjemahan Demo] Nikmati hasil terjemahan berkualitas tinggi!」

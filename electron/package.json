@@ -1,0 +1,38 @@
+{
+  "name": "linguadoc-desktop",
+  "version": "1.0.0",
+  "description": "LinguaDoc — Cross-Platform Universal Document Translator (Windows & Linux Desktop)",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build:linux": "electron-builder --linux AppImage deb",
+    "build:win": "electron-builder --win nsis portable",
+    "build:all": "electron-builder -mwl"
+  },
+  "build": {
+    "appId": "my.id.sabbilferdyansyah.linguadoc",
+    "productName": "LinguaDoc",
+    "copyright": "Copyright © 2026 LinguaDoc",
+    "directories": {
+      "output": "../dist-desktop"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs"
+    ],
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Office;Utility"
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "icon.png"
+    }
+  },
+  "author": "Sabbil & LinguaDoc Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}

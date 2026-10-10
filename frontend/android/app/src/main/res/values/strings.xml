@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LinguaDoc</string>
+    <string name="title_activity_main">LinguaDoc</string>
+    <string name="package_name">my.id.sabbilferdyansyah.linguadoc</string>
+    <string name="custom_url_scheme">my.id.sabbilferdyansyah.linguadoc</string>
+</resources>

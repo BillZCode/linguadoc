@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+backend/.venv/
+.venv/
+backend/storage/
+backend/workspace/
+backend/.pytest_cache/
+
+# Node & Frontend
+node_modules/
+frontend/node_modules/
+electron/node_modules/
+frontend/dist/
+dist-desktop/
+dist-portable/
+
+# Android Gradle
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/local.properties
+frontend/android/.idea/
+*.apk
+*.aab
+
+# Environment & Secrets
+.env
+.env.local
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

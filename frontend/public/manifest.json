@@ -1,0 +1,28 @@
+{
+  "id": "my.id.sabbilferdyansyah.linguadoc",
+  "name": "LinguaDoc — Universal Document Translator",
+  "short_name": "LinguaDoc",
+  "description": "Structure-preserving universal document translator for EPUB, DOCX, PDF, and digital books across Windows, Linux & Mobile.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FAF9F5",
+  "theme_color": "#C96442",
+  "categories": ["utilities", "productivity", "books"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Translate Document",
+      "url": "/",
+      "description": "Start document translation job"
+    }
+  ]
+}
