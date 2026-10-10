@@ -5,6 +5,19 @@
 
 ---
 
+## 📥 Unduh Langsung Aplikasi (Release v1.0.0)
+
+| Platform | Berkas Unduhan Langsung | Ukuran | Status |
+| :--- | :--- | :--- | :--- |
+| 🪟 **Windows** | [**LinguaDoc-1.0.0-Portable.exe**](https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/LinguaDoc-1.0.0-Portable.exe) | **70 MB** | Siap Pakai (Portable .exe) |
+| 🤖 **Android** | [**LinguaDoc-v1.0.0.apk**](https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/LinguaDoc-v1.0.0.apk) | **4 MB** | Siap Pasang (.apk Native) |
+| 🐧 **Linux (AppImage)** | [**LinguaDoc-1.0.0.AppImage**](https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/LinguaDoc-1.0.0.AppImage) | **102 MB** | Universal Linux Binary |
+| 🐧 **Linux (.DEB)** | [**linguadoc-desktop_1.0.0_amd64.deb**](https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/linguadoc-desktop_1.0.0_amd64.deb) | **71 MB** | Debian / Ubuntu Package |
+
+Semua rilis dan riwayat versi dapat diakses di: **[GitHub Releases](https://github.com/BillZCode/linguadoc/releases/tag/v1.0.0)**
+
+---
+
 ## 📖 Overview
 
 Standard document translation tools often extract raw text, run it through a translator, and dump it into an unstructured file. This ruins chapter flow, breaks table formatting, strips inline illustrations, and displaces dialogues.
