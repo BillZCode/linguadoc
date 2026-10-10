@@ -5,8 +5,11 @@ import {
 } from './types';
 import { 
   uploadDocument, startTranslation, getJobStatus, 
-  getJobPreview, getJobAst, getJobsList, deleteJob 
+  getJobPreview, getJobAst, getJobsList, deleteJob,
+  getStoredServerUrl, setStoredServerUrl, isCapacitorNative,
+  pingBackend, autoDetectBackend, getSampleUrl, getApiBase
 } from './api';
+import { Server, WifiOff } from 'lucide-react';
 
 import { Navbar } from './components/Navbar';
 import { HeroUpload } from './components/HeroUpload';
@@ -79,6 +82,38 @@ export const App: React.FC = () => {
     setApiKeys(keys);
     localStorage.setItem('linguadoc_api_keys', JSON.stringify(keys));
   };
+
+  // Server Connectivity State (Crucial for Mobile & Network Usage)
+  const [serverConnected, setServerConnected] = useState<boolean | null>(null);
+  const [currentServerUrl, setCurrentServerUrl] = useState<string>(() => {
+    return getStoredServerUrl() || (isCapacitorNative() ? 'http://192.168.1.8:8000' : '');
+  });
+
+  const verifyServerConnection = async (explicitUrl?: string) => {
+    let target = explicitUrl !== undefined ? explicitUrl : getStoredServerUrl();
+    if (!target && isCapacitorNative()) {
+      target = 'http://192.168.1.8:8000';
+      setStoredServerUrl(target);
+    }
+    const res = await pingBackend(target || window.location.origin);
+    if (res.success) {
+      setServerConnected(true);
+      setCurrentServerUrl(target || window.location.origin);
+    } else {
+      // Attempt auto-detection in local network
+      const detected = await autoDetectBackend();
+      if (detected) {
+        setServerConnected(true);
+        setCurrentServerUrl(detected);
+      } else {
+        setServerConnected(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    verifyServerConnection();
+  }, []);
 
   // Translation Job Configuration
   const [config, setConfig] = useState<TranslationConfig>({
@@ -156,17 +191,42 @@ export const App: React.FC = () => {
   const handleLoadSample = async (sampleType: 'epub' | 'docx' | 'md' | 'srt') => {
     setIsUploading(true);
     try {
-      const res = await fetch(`/api/samples/${sampleType}`);
-      if (!res.ok) throw new Error('Failed to load sample fixture');
-      const blob = await res.blob();
-      const ext = sampleType === 'epub' ? 'epub' : sampleType === 'docx' ? 'docx' : sampleType === 'md' ? 'md' : 'srt';
+      let blob: Blob | null = null;
       const sampleNames: Record<string, string> = {
         epub: 'sample_light_novel.epub',
         docx: 'sample_spec.docx',
         md: 'sample_readme.md',
         srt: 'sample_subs.srt',
       };
-      const file = new File([blob], sampleNames[sampleType], { type: blob.type });
+
+      // Try fetching from backend first
+      try {
+        const sampleUrl = getSampleUrl(sampleType);
+        const res = await fetch(sampleUrl);
+        if (res.ok) {
+          const contentType = res.headers.get('content-type') || '';
+          if (!contentType.includes('text/html')) {
+            blob = await res.blob();
+          }
+        }
+      } catch (e) {
+        console.warn('Network sample fetch failed, using fallback', e);
+      }
+
+      // Standalone client fallbacks if server offline
+      if (!blob) {
+        if (sampleType === 'md') {
+          const mdText = `# LinguaDoc Document Translation Sample\n\n## Bab 1: Petualangan Baru\n\nIni adalah contoh dokumen Markdown berstruktur tinggi.\nLinguaDoc menjaga seluruh sintaks Markdown, diagram, dan tabel tetap utuh 100%.\n\n| Parameter | Deskripsi | Status |\n| :--- | :--- | :--- |\n| Struktur | Preserved | Sempurna |\n| Format | CommonMark | Valid |\n`;
+          blob = new Blob([mdText], { type: 'text/markdown' });
+        } else if (sampleType === 'srt') {
+          const srtText = `1\n00:00:01,000 --> 00:00:04,500\nHello and welcome to LinguaDoc!\n\n2\n00:00:05,000 --> 00:00:09,000\nUniversal Structure-Preserving Document Translator.\n`;
+          blob = new Blob([srtText], { type: 'text/plain' });
+        } else {
+          throw new Error(`Tidak dapat mengunduh fixture ${sampleType.toUpperCase()} karena server backend belum terhubung.`);
+        }
+      }
+
+      const file = new File([blob], sampleNames[sampleType], { type: blob.type || 'application/octet-stream' });
       await handleFileSelected(file);
     } catch (err: any) {
       alert(`Sample loader error: ${err.message}`);
@@ -289,6 +349,7 @@ export const App: React.FC = () => {
         onOpenValidation={() => setIsValidationOpen(true)}
         hasValidationReport={Boolean(previewData?.validation)}
         onOpenInstall={() => setIsInstallOpen(true)}
+        serverConnected={serverConnected}
       />
 
       {/* Main Content Areas */}
@@ -297,6 +358,36 @@ export const App: React.FC = () => {
         {/* Tab 1: Translator Page */}
         {currentTab === 'translator' && (
           <div className="space-y-6">
+            
+            {/* Backend Offline Warning Banner (especially helpful on Mobile & Local Network) */}
+            {serverConnected === false && (
+              <div className="w-full bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+                <div className="flex items-start space-x-3">
+                  <WifiOff className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-semibold">Backend Belum Terhubung ({currentServerUrl || 'Offline'})</h4>
+                    <p className="text-xs text-amber-800/80 dark:text-amber-300/80 mt-0.5">
+                      Ponsel Anda belum dapat menjangkau server di laptop/komputer. Pastikan server aktif dan kedua perangkat berada di Wi-Fi yang sama.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2 shrink-0 self-end sm:self-center">
+                  <button
+                    onClick={() => verifyServerConnection()}
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-600 hover:bg-amber-700 text-white transition-colors cursor-pointer"
+                  >
+                    Pindai Ulang
+                  </button>
+                  <button
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-amber-500/30 bg-white/60 dark:bg-zinc-800 hover:bg-white dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                  >
+                    Atur IP
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Hero & Drag-drop upload (shown when no completed preview or user wants to upload) */}
             {(!previewData || !jobStatus || jobStatus.stage !== 'ready') && (
               <>
@@ -397,6 +488,7 @@ export const App: React.FC = () => {
         onSaveKeys={handleSaveApiKeys}
         activeProvider={config.provider}
         onSelectProvider={(p) => setConfig({ ...config, provider: p })}
+        onServerUrlChanged={(url) => verifyServerConnection(url)}
       />
 
       <FormatGuideModal

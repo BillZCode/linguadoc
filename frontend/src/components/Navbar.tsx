@@ -12,6 +12,7 @@ interface NavbarProps {
   onOpenValidation?: () => void;
   hasValidationReport?: boolean;
   onOpenInstall?: () => void;
+  serverConnected?: boolean | null;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -25,6 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenValidation,
   hasValidationReport,
   onOpenInstall,
+  serverConnected,
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-stone-200/80 dark:border-zinc-800/80 bg-[#FAF9F5]/90 dark:bg-[#151518]/90 backdrop-blur-md transition-colors">
@@ -86,7 +88,30 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right Action Icons */}
-        <div className="flex items-center space-x-2.5">
+        <div className="flex items-center space-x-2 sm:space-x-2.5">
+          {/* Server Connection Indicator */}
+          {serverConnected === false && (
+            <button 
+              onClick={onOpenSettings}
+              title="Server Backend Terputus - Klik untuk Atur URL"
+              className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border border-red-300 dark:border-red-800 bg-red-100/90 dark:bg-red-950/70 text-red-700 dark:text-red-300 animate-pulse cursor-pointer shrink-0"
+            >
+              <span className="w-2 h-2 rounded-full bg-red-500"></span>
+              <span className="hidden xs:inline">Server Offline</span>
+            </button>
+          )}
+
+          {serverConnected === true && (
+            <div 
+              onClick={onOpenSettings}
+              title="Server Backend Terhubung"
+              className="cursor-pointer hidden lg:flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Backend Online</span>
+            </div>
+          )}
+
           {/* Active Provider Pill */}
           <div 
             onClick={onOpenSettings}

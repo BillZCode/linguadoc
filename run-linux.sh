@@ -30,7 +30,7 @@ if curl -s "${APP_URL}/api/health" > /dev/null 2>&1; then
 else
     echo "[+] Menjalankan server backend LinguaDoc di latar belakang..."
     cd "${BACKEND_DIR}"
-    "${BACKEND_DIR}/.venv/bin/python" -m uvicorn main:app --host 127.0.0.1 --port ${PORT} > /dev/null 2>&1 &
+    "${BACKEND_DIR}/.venv/bin/python" -m uvicorn main:app --host 0.0.0.0 --port ${PORT} > /dev/null 2>&1 &
     BACKEND_PID=$!
     
     # Tunggu sampai server siap

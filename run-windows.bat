@@ -14,7 +14,7 @@ if exist ".venv\Scripts\python.exe" (
 )
 
 echo [+] Menjalankan server backend LinguaDoc di latar belakang...
-start /B "" %PYTHON_EXE% -m uvicorn main:app --host 127.0.0.1 --port 8000
+start /B "" %PYTHON_EXE% -m uvicorn main:app --host 0.0.0.0 --port 8000
 
 echo [+] Menunggu inisialisasi server (3 detik)...
 timeout /t 3 /nobreak >nul

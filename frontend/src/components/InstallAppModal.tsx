@@ -3,6 +3,7 @@ import {
   X, Smartphone, Monitor, Terminal, Download, 
   CheckCircle, Apple, Layers, Globe, ArrowRight, ShieldCheck 
 } from 'lucide-react';
+import { getApiBase } from '../api';
 
 interface InstallAppModalProps {
   isOpen: boolean;
@@ -131,7 +132,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                 </div>
                 <div className="flex items-center space-x-2">
                   <a
-                    href="/api/download/app/android"
+                    href={`${getApiBase()}/download/app/android`}
                     download="LinguaDoc-v1.0.0.apk"
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
                   >
@@ -210,7 +211,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                 </div>
                 <div className="flex items-center space-x-2">
                   <a
-                    href="/api/download/app/windows"
+                    href={`${getApiBase()}/download/app/windows`}
                     download="LinguaDoc-1.0.0-Portable.exe"
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
                   >
@@ -278,7 +279,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                 </div>
                 <div className="flex items-center space-x-2">
                   <a
-                    href="/api/download/app/linux-appimage"
+                    href={`${getApiBase()}/download/app/linux-appimage`}
                     download="LinguaDoc-1.0.0.AppImage"
                     className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
                   >
@@ -286,7 +287,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                     <span>AppImage</span>
                   </a>
                   <a
-                    href="/api/download/app/linux-deb"
+                    href={`${getApiBase()}/download/app/linux-deb`}
                     download="linguadoc-desktop_1.0.0_amd64.deb"
                     className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
                   >
