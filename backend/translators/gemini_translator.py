@@ -35,9 +35,10 @@ def discover_gemini_key(config: TranslationConfig) -> Optional[str]:
         return os.environ.get("GEMINI_API_KEY").strip()
     
     candidates = [
-        "/home/sabbil/Dokumen/TKJ/personal-it-hub/.env",
         os.path.join(os.path.dirname(__file__), "../.env"),
-        os.path.join(os.path.dirname(__file__), "../../.env")
+        os.path.join(os.path.dirname(__file__), "../../.env"),
+        os.path.expanduser("~/.env"),
+        ".env"
     ]
     for env_path in candidates:
         if os.path.exists(env_path):

@@ -1,22 +1,80 @@
-# Python
+# ==============================================================================
+# LinguaDoc — Comprehensive Security & Privacy .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. SECRETS, CREDENTIALS, TOKENS & PRIVATE KEYS (STRICTLY PROHIBITED)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.token
+*token*.txt
+.git-credentials
+google-services.json
+GoogleService-Info.plist
+credentials.json
+client_secret*.json
+id_rsa*
+id_ed25519*
+*.pub
+
+# ------------------------------------------------------------------------------
+# 2. USER DOCUMENTS, STORAGE & TRANSLATION OUTPUTS (PRIVACY PROTECTION)
+# ------------------------------------------------------------------------------
+backend/storage/
+backend/storage/**
+backend/workspace/
+backend/workspace/**
+backend/tests/test_outputs/
+backend/tests/test_outputs/**
+uploads/
+outputs/
+release-artifacts/
+
+# ------------------------------------------------------------------------------
+# 3. PYTHON VIRTUAL ENVIRONMENTS & CACHE
+# ------------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
 backend/.venv/
 .venv/
-backend/storage/
-backend/workspace/
+env/
+venv/
 backend/.pytest_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist-py/
+build/
 
-# Node & Frontend
+# ------------------------------------------------------------------------------
+# 4. NODE, FRONTEND & DESKTOP BUILD ARTIFACTS
+# ------------------------------------------------------------------------------
 node_modules/
 frontend/node_modules/
 electron/node_modules/
 frontend/dist/
+dist/
 dist-desktop/
 dist-portable/
+*.AppImage
+*.deb
+*.exe
+*.dmg
+*.rpm
 
-# Android Gradle
+# ------------------------------------------------------------------------------
+# 5. ANDROID GRADLE & LOCAL SDK CONFIG
+# ------------------------------------------------------------------------------
 frontend/android/.gradle/
 frontend/android/build/
 frontend/android/app/build/
@@ -25,11 +83,17 @@ frontend/android/.idea/
 *.apk
 *.aab
 
-# Environment & Secrets
-.env
-.env.local
-*.log
-
-# OS
+# ------------------------------------------------------------------------------
+# 6. OPERATING SYSTEM & EDITOR JUNK
+# ------------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
+desktop.ini
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

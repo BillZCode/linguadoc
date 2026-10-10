@@ -134,7 +134,7 @@ LinguaDoc siap digunakan secara instan di berbagai sistem operasi:
 - **Instalasi PWA Instan (Tanpa APK)**: Buka LinguaDoc di Chrome Android atau Safari iOS, tekan menu lalu pilih **"Tambahkan ke Layar Utama" / "Install App"**.
 - **Native Android Studio Project**: Jalankan `./package-mobile.sh` untuk sinkronisasi Capacitor ke folder `frontend/android/`.
 
-> 📖 **Panduan Lengkap:** Lihat [DISTRIBUTION_GUIDE.md](file:///home/sabbil/.gemini/antigravity-ide/scratch/linguadoc/DISTRIBUTION_GUIDE.md) untuk detail langkah demi langkah.
+> 📖 **Panduan Lengkap:** Lihat `DISTRIBUTION_GUIDE.md` untuk detail langkah demi langkah.
 
 
 ---
@@ -143,8 +143,8 @@ LinguaDoc siap digunakan secara instan di berbagai sistem operasi:
 
 LinguaDoc includes comprehensive automated tests covering all core document formats:
 ```bash
-cd scratch/linguadoc/backend
-PYTHONPATH=. .venv/bin/pytest tests/ -v
+cd backend
+python -m pytest tests/ -v
 ```
 
 Tests included:
@@ -164,12 +164,3 @@ Tests included:
 2. **Local Credential Storage**: AI API keys are stored exclusively in the user's browser session / localStorage and sent directly in HTTP authorization headers. They are never committed or logged.
 3. **No Training on User Data**: In DEMO mode and private API modes, documents are never collected for AI model training.
 4. **Temporary File Lifecycle**: Temporary files are stored in `backend/storage/` and automatically deleted upon job removal.
-
----
-
-## 📁 Recommended Workspace Directory
-
-For the best experience in your IDE, set your active workspace to:
-```
-/home/sabbil/.gemini/antigravity-ide/scratch/linguadoc
-```

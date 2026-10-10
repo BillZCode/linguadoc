@@ -379,7 +379,8 @@ def test_provider_connection(req: TestProviderRequest):
     if req.provider == TranslationProvider.GEMINI:
         key = req.api_key or os.environ.get("GEMINI_API_KEY")
         if not key:
-            for env_path in ["/home/sabbil/Dokumen/TKJ/personal-it-hub/.env", ".env"]:
+            search_envs = [".env", os.path.expanduser("~/.env"), os.path.join(os.path.dirname(__file__), "../.env")]
+            for env_path in search_envs:
                 if os.path.exists(env_path):
                     try:
                         with open(env_path, "r", encoding="utf-8") as f:
