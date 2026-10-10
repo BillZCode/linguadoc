@@ -178,6 +178,29 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           {activeTab === 'windows' && (
             <div className="space-y-4">
               
+              {/* Direct Download Standalone .EXE */}
+              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <h3 className="font-bold text-stone-900 dark:text-zinc-100 text-xs">
+                      Unduh Standalone Windows .EXE (Portable 71 MB)
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-stone-600 dark:text-zinc-400 mt-0.5">
+                    Berkas executable mandiri siap pakai langsung tanpa instalasi Node.js atau setup manual.
+                  </p>
+                </div>
+                <a
+                  href="/api/download/app/windows"
+                  download="LinguaDoc-1.0.0-Portable.exe"
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download .EXE</span>
+                </a>
+              </div>
+
               {/* Method 1: 1-Click Bat Launcher */}
               <div className="p-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-800/50 space-y-3">
                 <div className="flex items-center justify-between">

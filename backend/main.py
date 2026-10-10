@@ -425,6 +425,19 @@ def test_provider_connection(req: TestProviderRequest):
     return {"success": True, "message": f"Provider {req.provider.value} registered."}
 
 
+@app.get("/api/download/app/windows")
+async def download_windows_app():
+    exe_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist-desktop/LinguaDoc 1.0.0.exe"))
+    if os.path.exists(exe_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            exe_path,
+            media_type="application/vnd.microsoft.portable-executable",
+            filename="LinguaDoc-1.0.0-Portable.exe"
+        )
+    raise HTTPException(status_code=404, detail="Windows executable not found. Compile using package-desktop.sh")
+
+
 # Mount built frontend SPA static distribution for standalone desktop / single-port deployment
 FRONTEND_DIST = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend/dist"))
 if os.path.exists(FRONTEND_DIST):
