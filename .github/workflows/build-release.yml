@@ -1,8 +1,8 @@
-name: Build & Release Multi-Platform (APK & EXE)
+name: Build & Release Multi-Platform (APK & Desktop)
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
     tags: [ 'v*' ]
   workflow_dispatch:
 
@@ -24,8 +24,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
@@ -33,13 +31,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Frontend Dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Build Frontend SPA
         run: |
@@ -68,50 +63,20 @@ jobs:
           name: LinguaDoc-Android-APK
           path: release-artifacts/LinguaDoc-v1.0.0.apk
 
-  # --------------------------------------------------------------------------
-  # 2. BUILD WINDOWS EXE (Installer & Portable)
-  # --------------------------------------------------------------------------
-  build-windows:
-    name: Build Windows EXE
-    runs-on: windows-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Attach APK to Existing GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          node-version: 20
-
-      - name: Install Frontend & Build Assets
-        run: |
-          cd frontend
-          npm ci
-          npm run build
-
-      - name: Install Electron Dependencies
-        run: |
-          cd electron
-          npm ci
-
-      - name: Build Windows Executable via Electron Builder
-        run: |
-          cd electron
-          npm run build:win
+          files: release-artifacts/LinguaDoc-v1.0.0.apk
+          tag_name: ${{ github.ref_name }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: LinguaDoc-Windows-EXE
-          path: dist-desktop/*.exe
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # --------------------------------------------------------------------------
-  # 3. BUILD LINUX DESKTOP (AppImage & DEB)
+  # 2. BUILD LINUX DESKTOP (AppImage & DEB)
   # --------------------------------------------------------------------------
   build-linux:
-    name: Build Linux AppImage
+    name: Build Linux Desktop
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -125,13 +90,13 @@ jobs:
       - name: Install Frontend & Build Assets
         run: |
           cd frontend
-          npm ci
+          npm install
           npm run build
 
       - name: Install Electron Dependencies
         run: |
           cd electron
-          npm ci
+          npm install
 
       - name: Build Linux Binaries via Electron Builder
         run: |
@@ -148,38 +113,13 @@ jobs:
             dist-desktop/*.AppImage
             dist-desktop/*.deb
 
-  # --------------------------------------------------------------------------
-  # 4. PUBLISH GITHUB RELEASE (If Tagged)
-  # --------------------------------------------------------------------------
-  release:
-    name: Publish GitHub Release
-    needs: [ build-android, build-windows, build-linux ]
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Android Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: LinguaDoc-Android-APK
-          path: release-files/
-
-      - name: Download Windows Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: LinguaDoc-Windows-EXE
-          path: release-files/
-
-      - name: Download Linux Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: LinguaDoc-Linux-Binaries
-          path: release-files/
-
-      - name: Create GitHub Release with Binary Assets
+      - name: Attach Linux Assets to GitHub Release
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: release-files/*
-          name: "LinguaDoc Release ${{ github.ref_name }}"
-          generate_release_notes: true
-          draft: false
-          prerelease: false
+          files: |
+            dist-desktop/*.AppImage
+            dist-desktop/*.deb
+          tag_name: ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
