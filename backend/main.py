@@ -435,7 +435,46 @@ async def download_windows_app():
             media_type="application/vnd.microsoft.portable-executable",
             filename="LinguaDoc-1.0.0-Portable.exe"
         )
-    raise HTTPException(status_code=404, detail="Windows executable not found. Compile using package-desktop.sh")
+    raise HTTPException(status_code=404, detail="Windows executable not found.")
+
+
+@app.get("/api/download/app/linux-appimage")
+async def download_linux_appimage():
+    appimage_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist-desktop/LinguaDoc-1.0.0.AppImage"))
+    if os.path.exists(appimage_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            appimage_path,
+            media_type="application/x-executable",
+            filename="LinguaDoc-1.0.0.AppImage"
+        )
+    raise HTTPException(status_code=404, detail="Linux AppImage not found.")
+
+
+@app.get("/api/download/app/linux-deb")
+async def download_linux_deb():
+    deb_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist-desktop/linguadoc-desktop_1.0.0_amd64.deb"))
+    if os.path.exists(deb_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            deb_path,
+            media_type="application/vnd.debian.binary-package",
+            filename="linguadoc-desktop_1.0.0_amd64.deb"
+        )
+    raise HTTPException(status_code=404, detail="Linux Debian package not found.")
+
+
+@app.get("/api/download/app/android")
+async def download_android_apk():
+    apk_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist-desktop/LinguaDoc-v1.0.0.apk"))
+    if os.path.exists(apk_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            apk_path,
+            media_type="application/vnd.android.package-archive",
+            filename="LinguaDoc-v1.0.0.apk"
+        )
+    raise HTTPException(status_code=404, detail="Android APK not found.")
 
 
 # Mount built frontend SPA static distribution for standalone desktop / single-port deployment

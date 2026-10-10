@@ -116,6 +116,40 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           {activeTab === 'mobile' && (
             <div className="space-y-4">
               
+              {/* Direct Download Android APK */}
+              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <h3 className="font-bold text-stone-900 dark:text-zinc-100 text-xs">
+                      Unduh Android APK (LinguaDoc v1.0.0 — 4 MB)
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-stone-600 dark:text-zinc-400 mt-0.5">
+                    Aplikasi mandiri (.apk) siap pasang langsung di smartphone Android.
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <a
+                    href="/api/download/app/android"
+                    download="LinguaDoc-v1.0.0.apk"
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download APK</span>
+                  </a>
+                  <a
+                    href="https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/LinguaDoc-v1.0.0.apk"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-2 rounded-xl border border-stone-300 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 text-xs font-medium flex items-center justify-center"
+                    title="Download dari GitHub Release"
+                  >
+                    GitHub
+                  </a>
+                </div>
+              </div>
+
               {/* Android Guide */}
               <div className="p-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-800/50 space-y-3">
                 <div className="flex items-center space-x-2">
@@ -123,8 +157,8 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                     🤖
                   </div>
                   <div>
-                    <h3 className="font-semibold text-stone-900 dark:text-zinc-100">Android (Chrome / Brave / Samsung Internet)</h3>
-                    <p className="text-[11px] text-stone-500 dark:text-zinc-400">Instalasi instan menjadi aplikasi mandiri di ponsel</p>
+                    <h3 className="font-semibold text-stone-900 dark:text-zinc-100">Android PWA (Instan Tanpa Download Berkas)</h3>
+                    <p className="text-[11px] text-stone-500 dark:text-zinc-400">Instalasi instan menjadi aplikasi mandiri di ponsel via Chrome</p>
                   </div>
                 </div>
                 <ol className="list-decimal list-inside space-y-1.5 text-stone-700 dark:text-zinc-300 text-[11px] leading-relaxed">
@@ -154,23 +188,6 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                 </ol>
               </div>
 
-              {/* Native APK Option */}
-              <div className="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 space-y-2">
-                <div className="flex items-center space-x-2 text-amber-700 dark:text-amber-400 font-semibold">
-                  <Layers className="w-4 h-4" />
-                  <span>Build Native Android APK (Capacitor)</span>
-                </div>
-                <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                  Proyek ini telah dikonfigurasi dengan <code>Capacitor</code>. Untuk menghasilkan file <code>.apk</code> mandiri:
-                </p>
-                <div className="p-2.5 rounded-xl bg-stone-900 text-stone-200 font-mono text-[10px] space-y-1">
-                  <p>cd scratch/linguadoc/frontend</p>
-                  <p>npx cap add android</p>
-                  <p>npx cap sync</p>
-                  <p>npx cap open android # buka di Android Studio untuk Build APK</p>
-                </div>
-              </div>
-
             </div>
           )}
 
@@ -191,14 +208,25 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                     Berkas executable mandiri siap pakai langsung tanpa instalasi Node.js atau setup manual.
                   </p>
                 </div>
-                <a
-                  href="/api/download/app/windows"
-                  download="LinguaDoc-1.0.0-Portable.exe"
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download .EXE</span>
-                </a>
+                <div className="flex items-center space-x-2">
+                  <a
+                    href="/api/download/app/windows"
+                    download="LinguaDoc-1.0.0-Portable.exe"
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download .EXE</span>
+                  </a>
+                  <a
+                    href="https://github.com/BillZCode/linguadoc/releases/download/v1.0.0/LinguaDoc-1.0.0-Portable.exe"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-2 rounded-xl border border-stone-300 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 text-xs font-medium flex items-center justify-center"
+                    title="Download dari GitHub Release"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </div>
 
               {/* Method 1: 1-Click Bat Launcher */}
@@ -213,13 +241,8 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                   </span>
                 </div>
                 <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                  Cukup klik dua kali berkas <code>run-windows.bat</code> di folder proyek. Skrip ini akan:
+                  Cukup klik dua kali berkas <code>run-windows.bat</code> di folder proyek. Skrip ini akan menjalankan server lokal dan membuka jendela aplikasi desktop mandiri.
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-stone-700 dark:text-zinc-300 text-[11px]">
-                  <li>Mendeteksi & menjalankan server Python FastAPI di latar belakang.</li>
-                  <li>Membuka LinguaDoc langsung dalam mode <strong>Standalone App Window</strong> (tanpa toolbar browser yang mengganggu).</li>
-                  <li>Otomatis menutup server dengan rapi saat aplikasi selesai digunakan.</li>
-                </ul>
               </div>
 
               {/* Method 2: PWA Edge/Chrome */}
@@ -229,22 +252,8 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                   <h3 className="font-semibold text-stone-900 dark:text-zinc-100">Instalasi PWA via Microsoft Edge / Chrome</h3>
                 </div>
                 <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                  Buka <code>http://localhost:8000</code> di Edge atau Chrome, klik ikon aplikasi (layar komputer dengan tanda panah ke bawah) di ujung kanan address bar, lalu pilih <strong>"Install LinguaDoc"</strong>. LinguaDoc akan muncul di Start Menu dan Desktop Windows Anda.
+                  Buka <code>http://localhost:8000</code> di Edge atau Chrome, klik ikon aplikasi di ujung kanan address bar, lalu pilih <strong>"Install LinguaDoc"</strong>.
                 </p>
-              </div>
-
-              {/* Method 3: Electron .exe */}
-              <div className="p-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-800/50 space-y-2">
-                <div className="flex items-center space-x-2">
-                  <span className="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-xs">3</span>
-                  <h3 className="font-semibold text-stone-900 dark:text-zinc-100">Bundle Installer Standalone (.exe)</h3>
-                </div>
-                <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                  Jalankan perintah berikut di terminal untuk menghasilkan installer Windows resmi:
-                </p>
-                <div className="p-2.5 rounded-xl bg-stone-900 text-stone-200 font-mono text-[10px]">
-                  cd scratch/linguadoc/electron && npm run build:win
-                </div>
               </div>
 
             </div>
@@ -254,6 +263,39 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           {activeTab === 'linux' && (
             <div className="space-y-4">
               
+              {/* Direct Download AppImage & Deb */}
+              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <h3 className="font-bold text-stone-900 dark:text-zinc-100 text-xs">
+                      Unduh Paket Desktop Linux (AppImage & .DEB)
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-stone-600 dark:text-zinc-400 mt-0.5">
+                    Paket mandiri native untuk Debian/Ubuntu (.deb) atau distro Linux universal (.AppImage).
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <a
+                    href="/api/download/app/linux-appimage"
+                    download="LinguaDoc-1.0.0.AppImage"
+                    className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>AppImage</span>
+                  </a>
+                  <a
+                    href="/api/download/app/linux-deb"
+                    download="linguadoc-desktop_1.0.0_amd64.deb"
+                    className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Debian .deb</span>
+                  </a>
+                </div>
+              </div>
+
               {/* Method 1: 1-Click Linux Script */}
               <div className="p-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-800/50 space-y-3">
                 <div className="flex items-center justify-between">
@@ -271,23 +313,6 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                 <div className="p-2.5 rounded-xl bg-stone-900 text-stone-200 font-mono text-[10px] space-y-1">
                   <p>chmod +x run-linux.sh</p>
                   <p>./run-linux.sh</p>
-                </div>
-                <p className="text-[11px] text-stone-500 dark:text-zinc-400">
-                  Skrip ini juga secara otomatis dapat mendaftarkan LinguaDoc ke menu aplikasi desktop Linux Anda (<code>.desktop</code> entry).
-                </p>
-              </div>
-
-              {/* Method 2: AppImage & Deb */}
-              <div className="p-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-800/50 space-y-2">
-                <div className="flex items-center space-x-2">
-                  <span className="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-xs">2</span>
-                  <h3 className="font-semibold text-stone-900 dark:text-zinc-100">Paket Mandiri AppImage & .deb</h3>
-                </div>
-                <p className="text-[11px] text-stone-600 dark:text-zinc-400 leading-relaxed">
-                  Kompilasi paket Linux universal yang dapat berjalan di Ubuntu, Debian, Fedora, Arch, dll.:
-                </p>
-                <div className="p-2.5 rounded-xl bg-stone-900 text-stone-200 font-mono text-[10px]">
-                  cd scratch/linguadoc/electron && npm run build:linux
                 </div>
               </div>
 
