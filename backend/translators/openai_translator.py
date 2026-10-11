@@ -43,15 +43,20 @@ class OpenAITranslator(BaseTranslator):
         # 2. Sakura-ID Core Commandments for Japanese -> Indonesian
         if is_jp_to_id:
             constitution.extend([
-                "
---- SAKURA-ID LITERARY CONSTITUTION ---",
-                "1. TRANSLATE THE SPEAKER, NOT JUST THE WORDS: Capture the persona, social rank, gender, and emotional nuance of each character.",
-                "   - First-person pronouns (Ore, Boku, Watashi, Oresama, Warawa, Atashi) must map naturally to the character's Indonesian voice (aku, saya, gw, hamba, kami, dsb.).",
-                "   - Second-person pronouns (Omae, Kimi, Anata, Kisama, Omae-tachi) must reflect interpersonal dynamics (kau, kamu, Anda, kalian, bajingan, dsb.).",
-                "2. NO LOSS OF DESCRIPTION: Vivid narration, internal monologue, atmosphere, and sensory descriptions must NOT be summarized, diluted, or removed.",
-                "3. DIALOGUE VITALITY: Spoken lines must read naturally as spoken Indonesian novel dialogue, avoiding awkward literalisms like 'itu adalah' or rigid calques.",
-                "4. ONOMATOPOEIA & COMBAT: Translate sound effects and action rhythm contextually to preserve literary punch and dynamic pacing.",
-                "5. HONORIFICS & RETENTION: If specific honorifics (-san, -kun, -sama, -sensei) or fictional ranks are part of character relationships, maintain consistent respectful phrasing."
+                "\n--- SAKURA-ID LITERARY CONSTITUTION ---\n",
+                "1. STRICT PRESERVATION OF NAMES & PROPER NOUNS (CRITICAL):\n",
+                "   - Katakana and Kanji character names, nicknames, guild names, and fantasy locations (e.g. ホウショウ = Houshou, コウタ = Kouta, アリス = Alice) are PROPER NAMES. NEVER translate them into common Indonesian dictionary words (e.g. NEVER translate ホウショウ as 'kecambah' / 'tunas'!). Always transliterate/romanize proper names accurately into standard alphabet (Houshou, dsb.).",
+                "2. NOVEL VOCABULARY & SLANG FIDELITY:\n",
+                "   - '分け前' (wakemae) = bagian/jatah pembagian hasil/imbalan pekerjaan (bukan sekadar 'pekerjaan').",
+                "   - 'パーティー' (party) = party / kelompok petualang.",
+                "   - 'ギルド' (guild) = guild / serikat petualang.",
+                "   - '相棒' (aibou) = rekan/partner/sahabat karib.",
+                "3. TRANSLATE THE SPEAKER & DIALOGUE VITALITY:\n",
+                "   - Dialogue in quotation marks (「...」) must read as natural, spoken Indonesian fiction dialogue.",
+                "   - Pronouns: Ore/Boku -> aku/gw, Omae/Kimi -> kau/kamu/lu disesuaikan dengan kedekatan karakter.",
+                "   - Hindari struktur mesin kaku seperti 'Kecambah, ini adalah bagian...'. Ubah menjadi luwes, misal: '「Houshou, ini jatahmu dari pekerjaan kali ini.」'",
+                "4. NO LOSS OF DESCRIPTION:\n",
+                "   - Narasi deskripsi, monolog batin, dan suasana tidak boleh diringkas atau dihilangkan."
             ])
         else:
             constitution.extend([
