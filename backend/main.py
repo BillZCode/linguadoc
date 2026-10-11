@@ -426,6 +426,28 @@ def test_provider_connection(req: TestProviderRequest):
     return {"success": True, "message": f"Provider {req.provider.value} registered."}
 
 
+@app.get("/api/ollama/models")
+async def list_ollama_models(base_url: Optional[str] = "http://localhost:11434"):
+    """
+    List locally installed Ollama models dynamically.
+    """
+    import urllib.request
+    import json
+    
+    clean_url = (base_url or "http://localhost:11434").rstrip("/")
+    if clean_url.endswith("/v1"):
+        clean_url = clean_url[:-3]
+        
+    try:
+        req = urllib.request.Request(f"{clean_url}/api/tags", headers={"User-Agent": "LinguaDoc/1.0"})
+        with urllib.request.urlopen(req, timeout=3.0) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            models = [m.get("name") for m in data.get("models", []) if m.get("name")]
+            return {"available": True, "models": models}
+    except Exception as e:
+        return {"available": False, "models": [], "error": str(e)}
+
+
 @app.get("/api/download/app/windows")
 async def download_windows_app():
     exe_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist-desktop/LinguaDoc 1.0.0.exe"))

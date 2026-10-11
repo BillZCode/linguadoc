@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   ArrowLeftRight, BookMarked, ShieldCheck, 
-  Sparkles, Plus, Trash2, SlidersHorizontal, Key, Layers 
+  Sparkles, Plus, Trash2, SlidersHorizontal, Key, Layers, Server, RefreshCw, Cpu 
 } from 'lucide-react';
 import { TranslationConfig, ToneStyle, TranslationProvider, GlossaryEntry } from '../types';
+import { fetchOllamaModels } from '../api';
 
 interface TranslationConfigPanelProps {
   config: TranslationConfig;
@@ -44,6 +45,36 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
   chapterCount = 1,
 }) => {
   const [showGlossary, setShowGlossary] = useState(false);
+  const [localOllamaModels, setLocalOllamaModels] = useState<string[]>(['qwen2.5:7b', 'qwen2.5:3b']);
+  const [isOllamaAvailable, setIsOllamaAvailable] = useState<boolean | null>(null);
+  const [isScanningOllama, setIsScanningOllama] = useState(false);
+
+  const scanOllama = async () => {
+    setIsScanningOllama(true);
+    try {
+      const res = await fetchOllamaModels();
+      if (res.available && res.models.length > 0) {
+        setLocalOllamaModels(res.models);
+        setIsOllamaAvailable(true);
+        if (!config.model_name && res.models.includes('qwen2.5:7b')) {
+          onChange({ ...config, model_name: 'qwen2.5:7b' });
+        }
+      } else {
+        setIsOllamaAvailable(false);
+      }
+    } catch {
+      setIsOllamaAvailable(false);
+    } finally {
+      setIsScanningOllama(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (config.provider === 'ollama') {
+      scanOllama();
+    }
+  }, [config.provider]);
+
   const [newTerm, setNewTerm] = useState('');
   const [newTrans, setNewTrans] = useState('');
   const [newCategory, setNewCategory] = useState<'character' | 'place' | 'technical' | 'untranslatable'>('character');
@@ -230,8 +261,75 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
         </div>
       )}
 
+      {/* Ollama Local LLM Selector */}
+      {config.provider === 'ollama' && (
+        <div className="p-3.5 rounded-xl bg-stone-100/80 dark:bg-zinc-800/80 border border-stone-200 dark:border-zinc-700 space-y-2.5 animate-in fade-in">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-stone-700 dark:text-zinc-300 flex items-center gap-1.5 font-semibold text-stone-900 dark:text-zinc-100">
+              <Cpu className="w-3.5 h-3.5 text-[#C96442]" />
+              Model LLM Lokal (Offline & Gratis)
+            </label>
+            <button
+              type="button"
+              onClick={scanOllama}
+              disabled={isScanningOllama}
+              className="flex items-center gap-1 text-[11px] text-[#C96442] hover:underline font-medium cursor-pointer"
+            >
+              <RefreshCw className={`w-3 h-3 ${isScanningOllama ? 'animate-spin' : ''}`} />
+              {isScanningOllama ? 'Memindai...' : 'Pindai Ulang Model'}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <span className="text-[10px] text-stone-500 dark:text-zinc-400 block mb-1">Pilih Model Terpasang</span>
+              <select
+                value={config.model_name || 'qwen2.5:7b'}
+                onChange={(e) => onChange({ ...config, model_name: e.target.value })}
+                className="w-full rounded-xl border border-stone-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-xs text-stone-900 dark:text-zinc-100 font-medium focus:outline-hidden focus:ring-2 focus:ring-[#C96442]/30"
+              >
+                {localOllamaModels.map((m) => (
+                  <option key={m} value={m}>
+                    {m === 'qwen2.5:7b' ? '⚡ ' + m + ' (Rekomendasi Utama - Sangat Akurat)' : m}
+                  </option>
+                ))}
+                {!localOllamaModels.includes(config.model_name || '') && config.model_name && (
+                  <option value={config.model_name}>{config.model_name}</option>
+                )}
+              </select>
+            </div>
+            <div>
+              <span className="text-[10px] text-stone-500 dark:text-zinc-400 block mb-1">Input Nama Model Kustom</span>
+              <input
+                type="text"
+                placeholder="contoh: qwen2.5:7b atau qwen2.5:3b"
+                value={config.model_name || 'qwen2.5:7b'}
+                onChange={(e) => onChange({ ...config, model_name: e.target.value.trim() })}
+                className="w-full rounded-xl border border-stone-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 font-mono text-xs text-stone-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-[#C96442]/30"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] text-stone-500 dark:text-zinc-400 pt-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full ${isOllamaAvailable ? 'bg-emerald-500' : isOllamaAvailable === false ? 'bg-amber-500' : 'bg-stone-400'}`}></span>
+              <span>
+                {isOllamaAvailable 
+                  ? 'Ollama Aktif • Partisi 56 GB Siap' 
+                  : isOllamaAvailable === false 
+                  ? 'Ollama belum terdeteksi aktif di port 11434' 
+                  : 'Memeriksa status Ollama...'}
+              </span>
+            </div>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+              ✓ 100% Offline Tanpa Kuota
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Inline API Key Input if AI Provider selected */}
-      {config.provider !== 'demo' && (
+      {config.provider !== 'demo' && config.provider !== 'ollama' && (
         <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-2 animate-in fade-in">
           <div className="flex items-center space-x-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
             <Key className="w-3.5 h-3.5 text-amber-600" />

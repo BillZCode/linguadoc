@@ -196,6 +196,15 @@ export async function deleteJob(jobId: string) {
   return safeFetchJson(`${getApiBase()}/jobs/${jobId}`, { method: 'DELETE' }, 'Hapus pekerjaan');
 }
 
+export async function fetchOllamaModels(baseUrl?: string): Promise<{ available: boolean; models: string[]; error?: string }> {
+  try {
+    const query = baseUrl ? `?base_url=${encodeURIComponent(baseUrl)}` : '';
+    return await safeFetchJson(`${getApiBase()}/ollama/models${query}`, undefined, 'Deteksi model Ollama');
+  } catch (err: any) {
+    return { available: false, models: [], error: err.message };
+  }
+}
+
 export async function testProviderConnection(provider: string, apiKey?: string, apiBaseUrl?: string, modelName?: string) {
   return safeFetchJson(`${getApiBase()}/test-provider`, {
     method: 'POST',
