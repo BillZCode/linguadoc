@@ -33,6 +33,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [openaiKey, setOpenaiKey] = useState(apiKeys.openai || '');
   const [anthropicKey, setAnthropicKey] = useState(apiKeys.anthropic || '');
   const [ollamaUrl, setOllamaUrl] = useState(apiKeys.ollama_url || 'http://localhost:11434/v1');
+  const [ollamaModel, setOllamaModel] = useState(apiKeys.ollama_model || 'qwen2.5:7b');
 
   // Backend Server URL Configuration
   const [serverUrl, setServerUrl] = useState(() => {
@@ -116,16 +117,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       openai: openaiKey.trim(),
       anthropic: anthropicKey.trim(),
       ollama_url: ollamaUrl.trim(),
+      ollama_model: ollamaModel.trim(),
     });
     onClose();
   };
 
   const handleTest = async (provider: string) => {
     setIsTesting(true);
-    setTestStatus('Testing connectivity...');
+    setTestStatus('Menguji koneksi engine AI...');
     try {
       const key = provider === 'gemini' ? geminiKey : provider === 'openai' ? openaiKey : anthropicKey;
-      const res = await testProviderConnection(provider, key, ollamaUrl);
+      const res = await testProviderConnection(provider, key, ollamaUrl, ollamaModel);
       setTestStatus(res.message);
     } catch (err: any) {
       setTestStatus(`Error: ${err.message}`);
@@ -304,17 +306,82 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Local Ollama */}
-          <div className="space-y-1.5">
-            <label className="font-semibold text-stone-800 dark:text-zinc-200">
-              Local Ollama Base URL
-            </label>
-            <input
-              type="text"
-              placeholder="http://localhost:11434/v1"
-              value={ollamaUrl}
-              onChange={(e) => setOllamaUrl(e.target.value)}
-              className="w-full rounded-xl border border-stone-300 dark:border-zinc-700 bg-stone-50/50 dark:bg-zinc-800/60 px-3 py-2 font-mono text-stone-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-[#C96442]/30"
-            />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="font-semibold text-stone-800 dark:text-zinc-200">
+                Local Ollama AI (Self-Hosted di Laptop)
+              </label>
+              <button
+                type="button"
+                onClick={() => handleTest('ollama')}
+                disabled={isTesting}
+                className="text-[11px] text-[#C96442] hover:underline font-mono cursor-pointer"
+              >
+                Uji Koneksi
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <span className="text-[10px] text-stone-500 dark:text-zinc-400 block mb-1">Base URL</span>
+                <input
+                  type="text"
+                  placeholder="http://localhost:11434/v1"
+                  value={ollamaUrl}
+                  onChange={(e) => setOllamaUrl(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 dark:border-zinc-700 bg-stone-50/50 dark:bg-zinc-800/60 px-3 py-2 font-mono text-xs text-stone-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-[#C96442]/30"
+                />
+              </div>
+              <div>
+                <span className="text-[10px] text-stone-500 dark:text-zinc-400 block mb-1">Nama Model</span>
+                <input
+                  type="text"
+                  placeholder="qwen2.5:7b"
+                  value={ollamaModel}
+                  onChange={(e) => setOllamaModel(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 dark:border-zinc-700 bg-stone-50/50 dark:bg-zinc-800/60 px-3 py-2 font-mono text-xs text-stone-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-[#C96442]/30"
+                />
+              </div>
+            </div>
+            {/* Quick model recommendations for i3 1115G4 + 24GB RAM */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <span className="text-[10px] text-stone-500 dark:text-zinc-400">Rekomendasi Laptop:</span>
+              <button
+                type="button"
+                onClick={() => setOllamaModel('qwen2.5:7b')}
+                className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors cursor-pointer ${
+                  ollamaModel === 'qwen2.5:7b' 
+                    ? 'bg-[#C96442]/15 border-[#C96442] text-[#C96442] font-semibold' 
+                    : 'border-stone-200 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-600 dark:text-zinc-300'
+                }`}
+                title="Akurasi terjemahan terbaik & patuh format JSON (RAM ~5GB)"
+              >
+                qwen2.5:7b (Terbaik)
+              </button>
+              <button
+                type="button"
+                onClick={() => setOllamaModel('qwen2.5:3b')}
+                className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors cursor-pointer ${
+                  ollamaModel === 'qwen2.5:3b' 
+                    ? 'bg-[#C96442]/15 border-[#C96442] text-[#C96442] font-semibold' 
+                    : 'border-stone-200 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-600 dark:text-zinc-300'
+                }`}
+                title="Sangat cepat di Core i3, hemat baterai (RAM ~2.5GB)"
+              >
+                qwen2.5:3b (Gesit)
+              </button>
+              <button
+                type="button"
+                onClick={() => setOllamaModel('llama3.2:3b')}
+                className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors cursor-pointer ${
+                  ollamaModel === 'llama3.2:3b' 
+                    ? 'bg-[#C96442]/15 border-[#C96442] text-[#C96442] font-semibold' 
+                    : 'border-stone-200 dark:border-zinc-700 hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-600 dark:text-zinc-300'
+                }`}
+                title="Alternatif Meta Llama (RAM ~2.5GB)"
+              >
+                llama3.2:3b
+              </button>
+            </div>
           </div>
 
         </div>

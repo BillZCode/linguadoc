@@ -278,6 +278,7 @@ export const App: React.FC = () => {
         ? apiKeys.anthropic
         : undefined,
       api_base_url: config.provider === 'ollama' ? (apiKeys.ollama_url || 'http://localhost:11434/v1') : undefined,
+      model_name: config.provider === 'ollama' ? (apiKeys.ollama_model || 'qwen2.5:7b') : config.model_name,
     };
 
     try {

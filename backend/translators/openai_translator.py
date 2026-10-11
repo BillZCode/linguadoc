@@ -8,7 +8,7 @@ import httpx
 from typing import List, Dict, Any, Optional
 from translators.base import BaseTranslator
 from models.document_tree import DocumentNode
-from models.translation_job import TranslationConfig
+from models.translation_job import TranslationConfig, TranslationProvider
 
 
 class OpenAITranslator(BaseTranslator):
@@ -27,8 +27,11 @@ class OpenAITranslator(BaseTranslator):
             return nodes
             
         base_url = config.api_base_url or os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
-        api_key = config.api_key or os.environ.get("OPENAI_API_KEY", "")
-        model_name = config.model_name or "gpt-4o-mini"
+        api_key = config.api_key or os.environ.get("OPENAI_API_KEY", "ollama")
+        if config.provider == TranslationProvider.OLLAMA:
+            model_name = config.model_name or "qwen2.5:7b"
+        else:
+            model_name = config.model_name or "gpt-4o-mini"
         
         # Build glossary rules
         glossary_rules = ""
