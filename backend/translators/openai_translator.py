@@ -16,6 +16,18 @@ from models.document_tree import DocumentNode
 from models.translation_job import TranslationConfig, TranslationProvider
 
 
+
+def _load_default_ln_lexicon() -> Dict[str, Any]:
+    json_path = os.path.join(os.path.dirname(__file__), "../data/ln_vocabulary.json")
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {}
+
+
 class OpenAITranslator(BaseTranslator):
     """
     Adapter for OpenAI-compatible chat completion APIs (OpenAI, DeepSeek, Ollama).
@@ -42,21 +54,35 @@ class OpenAITranslator(BaseTranslator):
 
         # 2. Sakura-ID Core Commandments for Japanese -> Indonesian
         if is_jp_to_id:
+            lexicon = _load_default_ln_lexicon()
+            novel_terms = lexicon.get("novel_terms_and_slang", {})
+            forbidden = lexicon.get("forbidden_mistranslations", {})
+            
+            # Formatted list of key LN vocab
+            vocab_sample = "\n".join([f"   - '{k}' => '{v}'" for k, v in list(novel_terms.items())[:20]])
+            forbidden_sample = "\n".join([f"   - PERINGATAN '{k}': {v}" for k, v in forbidden.items()])
+
             constitution.extend([
-                "\n--- SAKURA-ID LITERARY CONSTITUTION ---\n",
-                "1. STRICT PRESERVATION OF NAMES & PROPER NOUNS (CRITICAL):\n",
-                "   - Katakana and Kanji character names, nicknames, guild names, and fantasy locations (e.g. ホウショウ = Houshou, コウタ = Kouta, アリス = Alice) are PROPER NAMES. NEVER translate them into common Indonesian dictionary words (e.g. NEVER translate ホウショウ as 'kecambah' / 'tunas'!). Always transliterate/romanize proper names accurately into standard alphabet (Houshou, dsb.).",
-                "2. NOVEL VOCABULARY & SLANG FIDELITY:\n",
-                "   - '分け前' (wakemae) = bagian/jatah pembagian hasil/imbalan pekerjaan (bukan sekadar 'pekerjaan').",
-                "   - 'パーティー' (party) = party / kelompok petualang.",
-                "   - 'ギルド' (guild) = guild / serikat petualang.",
-                "   - '相棒' (aibou) = rekan/partner/sahabat karib.",
-                "3. TRANSLATE THE SPEAKER & DIALOGUE VITALITY:\n",
-                "   - Dialogue in quotation marks (「...」) must read as natural, spoken Indonesian fiction dialogue.",
-                "   - Pronouns: Ore/Boku -> aku/gw, Omae/Kimi -> kau/kamu/lu disesuaikan dengan kedekatan karakter.",
-                "   - Hindari struktur mesin kaku seperti 'Kecambah, ini adalah bagian...'. Ubah menjadi luwes, misal: '「Houshou, ini jatahmu dari pekerjaan kali ini.」'",
-                "4. NO LOSS OF DESCRIPTION:\n",
-                "   - Narasi deskripsi, monolog batin, dan suasana tidak boleh diringkas atau dihilangkan."
+                "\n--- SAKURA-ID LITERARY CONSTITUTION & KNOWLEDGE BASE ---",
+                "1. STRICT PRESERVATION OF NAMES & ENTITIES (ANTI-CALQUE):",
+                "   - Katakana and Kanji character names, nicknames, titles, and fantasy locations (misal: ホウショウ = Houshou, コウタ = Kouta, アリス = Alice) adalah NAMA PRIBADI/ENTITAS KHUSUS.",
+                "   - DILARANG KERAS menerjemahkan nama ke arti harfiah kamus tumbuhan/benda!",
+                "     Contoh fatal: ホウショウ (Houshou) JANGAN PERNAH diterjemahkan jadi 'kecambah' atau 'tunas'!",
+                "   - Selalu pertahankan dan transliterasikan nama ke abjad alfabet latin yang bersih (Houshou, dsb.).",
+                "\n2. KAMUS STANDAR LIGHT NOVEL & WEB NOVEL (GUNAKAN ISTILAH INI):",
+                vocab_sample,
+                "\n3. LARANGAN KATA ANEH & TERJEMAHAN HARFIAH KAKU:",
+                forbidden_sample,
+                "   - Jangan gunakan frasa kaku seperti 'Itu adalah...', 'Membagi pekerjaan...', dsb.",
+                "   - '分け前' (wakemae) harus diterjemahkan sebagai 'jatah bayaran', 'bagian keuntungan', atau 'hasil rampasan', BUKAN 'bagian pekerjaan'.",
+                "   - Percakapan dalam tanda petik (「...」) WAJIB mengalir layaknya dialog novel sastra Indonesia populer, ekspresif dan hidup.",
+                "\n4. IN-CONTEXT FEW-SHOT EXAMPLES (IKUTI STANDAR INI):",
+                "   - Input: 「ホウショウ、コイツが今回の仕事の分け前だ」",
+                "     Output: 「Houshou, ini jatahmu dari pekerjaan kali ini.」",
+                "   - Input: 「少し……いや、かなり多くないか？」",
+                "     Output: 「Bukankah ini sedikit... tidak, malah terlalu banyak?」",
+                "   - Input: 「俺達のパーティーもここまでだな」",
+                "     Output: 「Tampaknya party kita berakhir sampai di sini.」"
             ])
         else:
             constitution.extend([

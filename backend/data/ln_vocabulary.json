@@ -1,0 +1,62 @@
+{
+  "characters_and_titles": {
+    "ホウショウ": "Houshou",
+    "勇者": "Pahlawan",
+    "魔王": "Raja Iblis",
+    "冒険者": "Petualang",
+    "ギルドマスター": "Guild Master",
+    "聖女": "Gadis Suci",
+    "賢者": "Orang Bijak",
+    "相棒": "rekan"
+  },
+  "novel_terms_and_slang": {
+    "分け前": "jatah/bagian keuntungan",
+    "異世界": "dunia lain (isekai)",
+    "クラスメイト": "teman sekelas",
+    "ステータス": "status",
+    "スキル": "skill/keterampilan",
+    "魔力": "sihir/mana",
+    "魔物": "monster/monster buas",
+    "魔族": "iblis/kaum iblis",
+    "ダンジョン": "dungeon/labirin",
+    "転移": "teleportasi/berpindah tempat",
+    "召喚": "pemanggilan",
+    "チート": "cheat/kemampuan curang",
+    "レベル": "level",
+    "討伐": "penaklukan/perburuan",
+    "依頼": "permintaan/quest",
+    "素材": "material/bahan",
+    "宿屋": "penginapan",
+    "酒場": "kedai/bar",
+    "パーティー": "party",
+    "ソロ": "solo/sendirian",
+    "気配": "hawa keberadaan/kehadiran",
+    "殺気": "hawa membunuh/keinginan membunuh",
+    "違和感": "perasaan janggal",
+    "ため息をつく": "menghela napas",
+    "苦笑い": "tersenyum kecut",
+    "肩をすくめる": "mengangkat bahu",
+    "首をかしげる": "memiringkan kepala",
+    "舌打ち": "berdecak kesal",
+    "ニヤリと": "tersenyum seringai",
+    "クスリと": "terkekeh geli"
+  },
+  "pronouns_and_registers": {
+    "俺": "aku / gw",
+    "僕": "aku",
+    "私": "aku / saya",
+    "お前": "kau / kamu / lu",
+    "あんた": "kau / kamu",
+    "貴様": "bajingan / keparat",
+    "あいつ": "orang itu / si brengsek itu",
+    "やつ": "orang itu / bajingan itu"
+  },
+  "forbidden_mistranslations": {
+    "ホウショウ": "JANGAN terjemahkan jadi 'kecambah' atau 'tunas'. Ini NAMA TOKOH (Houshou)!",
+    "それな": "JANGAN terjemahkan jadi 'itu adalah'. Terjemahkan jadi 'bener banget' / 'setuju'.",
+    "草": "Dalam percakapan santai, berarti 'wkwk' / tertawa, bukan rumput tanaman.",
+    "ヤバい": "Terjemahkan kontekstual: 'gawat', 'luar biasa', 'keren banget', bukan kaku.",
+    "マジで": "Beneran / serius.",
+    "しょうがない": "Mau bagaimana lagi / tak ada pilihan lain."
+  }
+}
