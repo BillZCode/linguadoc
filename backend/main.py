@@ -409,9 +409,9 @@ def test_provider_connection(req: TestProviderRequest):
         except Exception as e:
             return {"success": False, "message": f"Gemini connection error: {str(e)}"}
             
-    if req.provider in [TranslationProvider.OPENAI, TranslationProvider.OLLAMA]:
+    if req.provider in [TranslationProvider.OPENAI, TranslationProvider.OLLAMA, TranslationProvider.SAKURA_ID]:
         import httpx
-        base_url = req.api_base_url or ("http://localhost:11434/v1" if req.provider == TranslationProvider.OLLAMA else "https://api.openai.com/v1")
+        base_url = req.api_base_url or ("http://localhost:11434/v1" if req.provider in [TranslationProvider.OLLAMA, TranslationProvider.SAKURA_ID] else "https://api.openai.com/v1")
         key = req.api_key or os.environ.get("OPENAI_API_KEY", "")
         headers = {"Authorization": f"Bearer {key}"} if key else {}
         try:

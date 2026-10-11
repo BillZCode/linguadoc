@@ -29,7 +29,7 @@ class TranslationPipeline:
         prov = job.config.provider
         if prov == TranslationProvider.GEMINI:
             return GeminiTranslator()
-        elif prov == TranslationProvider.OPENAI or prov == TranslationProvider.OLLAMA:
+        elif prov in [TranslationProvider.OPENAI, TranslationProvider.OLLAMA, TranslationProvider.SAKURA_ID]:
             return OpenAITranslator()
         elif prov == TranslationProvider.ANTHROPIC:
             return AnthropicTranslator()

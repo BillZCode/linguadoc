@@ -34,7 +34,7 @@ export type PipelineStage =
 
 export type ToneStyle = 'natural' | 'formal' | 'academic' | 'technical' | 'literal';
 
-export type TranslationProvider = 'demo' | 'gemini' | 'openai' | 'anthropic' | 'ollama';
+export type TranslationProvider = 'demo' | 'gemini' | 'openai' | 'anthropic' | 'ollama' | 'sakura_id';
 
 export interface GlossaryEntry {
   term: string;

@@ -23,6 +23,7 @@ class TranslationProvider(str, Enum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     OLLAMA = "ollama"
+    SAKURA_ID = "sakura_id"
 
 
 class PipelineStage(str, Enum):

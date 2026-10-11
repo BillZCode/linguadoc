@@ -277,8 +277,8 @@ export const App: React.FC = () => {
         : config.provider === 'anthropic'
         ? apiKeys.anthropic
         : undefined,
-      api_base_url: config.provider === 'ollama' ? (apiKeys.ollama_url || 'http://localhost:11434/v1') : undefined,
-      model_name: config.provider === 'ollama' ? (apiKeys.ollama_model || 'qwen2.5:7b') : config.model_name,
+      api_base_url: (config.provider === 'ollama' || config.provider === 'sakura_id') ? (apiKeys.ollama_url || 'http://localhost:11434/v1') : undefined,
+      model_name: (config.provider === 'ollama' || config.provider === 'sakura_id') ? (config.model_name || apiKeys.ollama_model || 'qwen2.5:7b') : config.model_name,
     };
 
     try {

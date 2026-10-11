@@ -70,7 +70,7 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
   };
 
   React.useEffect(() => {
-    if (config.provider === 'ollama') {
+    if (config.provider === 'ollama' || config.provider === 'sakura_id') {
       scanOllama();
     }
   }, [config.provider]);
@@ -196,6 +196,7 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
             <option value="gemini">Google Gemini / Gemma (Multi-Model Core)</option>
             <option value="anthropic">Anthropic Claude 3.5 (AI Sastra • Butuh Anthropic Key)</option>
             <option value="openai">OpenAI / DeepSeek (GPT-4o-mini / DeepSeek-V3)</option>
+            <option value="sakura_id">🌸 Sakura-ID (Specialist Sastra JP & LN Engine • Local Qwen)</option>
             <option value="ollama">Local Ollama (Self-Hosted Model)</option>
           </select>
         </div>
@@ -261,8 +262,8 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
         </div>
       )}
 
-      {/* Ollama Local LLM Selector */}
-      {config.provider === 'ollama' && (
+      {/* Ollama / Sakura-ID Local LLM Selector */}
+      {(config.provider === 'ollama' || config.provider === 'sakura_id') && (
         <div className="p-3.5 rounded-xl bg-stone-100/80 dark:bg-zinc-800/80 border border-stone-200 dark:border-zinc-700 space-y-2.5 animate-in fade-in">
           <div className="flex items-center justify-between">
             <label className="text-xs font-medium text-stone-700 dark:text-zinc-300 flex items-center gap-1.5 font-semibold text-stone-900 dark:text-zinc-100">
@@ -329,7 +330,7 @@ export const TranslationConfigPanel: React.FC<TranslationConfigPanelProps> = ({
       )}
 
       {/* Inline API Key Input if AI Provider selected */}
-      {config.provider !== 'demo' && config.provider !== 'ollama' && (
+      {config.provider !== 'demo' && config.provider !== 'ollama' && config.provider !== 'sakura_id' && (
         <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-2 animate-in fade-in">
           <div className="flex items-center space-x-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
             <Key className="w-3.5 h-3.5 text-amber-600" />
